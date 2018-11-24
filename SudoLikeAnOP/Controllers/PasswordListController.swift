@@ -1,11 +1,3 @@
-//
-//  PasswordListController.swift
-//  SudoLikeAnOP
-//
-//  Created by Russell Teabeault on 11/21/18.
-//  Copyright © 2018 Russell Teabeault. All rights reserved.
-//
-
 import Cocoa
 
 class PasswordListController: NSViewController {
@@ -16,19 +8,32 @@ class PasswordListController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("ViewDidLoad")
         tableView.delegate = self
         tableView.dataSource = self
         // Do view setup here.
         tableView.reloadData()
-
+        
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) {
+            self.keyDown(with: $0)
+            return $0
+        }
+    }
+    
+    override func keyDown(with event: NSEvent){
+        switch event.keyCode {
+        case 36: // Return
+            print(passwords[tableView.selectedRow])
+            self.view.window?.close()
+            break
+        default:
+            break
+        }
     }
 }
 
 extension PasswordListController: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        print("Getting number of rows")
         return passwords.count
     }
 }
